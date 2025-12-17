@@ -80,6 +80,18 @@ struct PopoverView: View {
                 .cornerRadius(12)
                 .shadow(color: .black.opacity(0.08), radius: 4, y: 2)
             
+            // Debug Button
+            Button(action: { timerManager.startDebugSession() }) {
+                Text("🐛 5s Debug")
+                    .font(.system(size: 11, weight: .medium))
+                    .foregroundColor(.white)
+                    .padding(.horizontal, 12)
+                    .padding(.vertical, 6)
+                    .background(Color.orange)
+                    .cornerRadius(6)
+            }
+            .buttonStyle(PlainButtonStyle())
+            
             // Quit Button
             Button(action: {
                 NSApplication.shared.terminate(nil)

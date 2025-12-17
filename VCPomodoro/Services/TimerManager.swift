@@ -68,6 +68,21 @@ class TimerManager: ObservableObject {
         switchSession()
     }
     
+    // Debug: Start a 5-second session
+    func startDebugSession() {
+        timer?.invalidate()
+        timer = nil
+        state = .idle
+        currentSession = .work
+        secondsRemaining = 5
+        soundService.playStart()
+        state = .running
+        timer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { [weak self] _ in
+            self?.tick()
+        }
+        onUpdate?()
+    }
+    
     func updateWorkDuration(_ minutes: Int) {
         workDuration = minutes
         if state == .idle && currentSession == .work {

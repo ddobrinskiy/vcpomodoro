@@ -19,6 +19,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
     private var notificationService: NotificationService!
     private var soundService: SoundService!
     private var eventMonitor: Any?
+    private var hotkeyMonitor: Any?
     
     func applicationDidFinishLaunching(_ notification: Notification) {
         // Initialize services
@@ -54,9 +55,9 @@ class AppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
             button.target = self
         }
         
-        // Observe timer changes to update menu bar
+        // Observe timer changes to update menu bar (debounced to avoid layout recursion)
         timerManager.onUpdate = { [weak self] in
-            DispatchQueue.main.async {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.01) {
                 if let button = self?.statusItem.button {
                     self?.updateStatusButton(button)
                 }
@@ -69,11 +70,45 @@ class AppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
                 popover.performClose(nil)
             }
         }
+        
+        // Set up global hotkey: Cmd+Shift+P to toggle start/pause
+        hotkeyMonitor = NSEvent.addGlobalMonitorForEvents(matching: .keyDown) { [weak self] event in
+            // Check for Cmd+Shift+P
+            let flags = event.modifierFlags.intersection(.deviceIndependentFlagsMask)
+            if flags == [.command, .shift] && event.keyCode == 35 { // 35 = 'P' key
+                DispatchQueue.main.async {
+                    self?.toggleStartPause()
+                }
+            }
+        }
+        
+        // Also monitor local events (when app has focus)
+        NSEvent.addLocalMonitorForEvents(matching: .keyDown) { [weak self] event in
+            let flags = event.modifierFlags.intersection(.deviceIndependentFlagsMask)
+            if flags == [.command, .shift] && event.keyCode == 35 {
+                DispatchQueue.main.async {
+                    self?.toggleStartPause()
+                }
+                return nil // Consume the event
+            }
+            return event
+        }
     }
     
     func applicationWillTerminate(_ notification: Notification) {
         if let monitor = eventMonitor {
             NSEvent.removeMonitor(monitor)
+        }
+        if let monitor = hotkeyMonitor {
+            NSEvent.removeMonitor(monitor)
+        }
+    }
+    
+    private func toggleStartPause() {
+        if timerManager.state == .running {
+            timerManager.pause()
+        } else {
+            timerManager.start()
         }
     }
     
