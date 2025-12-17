@@ -25,6 +25,7 @@ struct SettingsView: View {
                     value: timerManager.workDuration,
                     range: 5...60,
                     accentColor: MaterialColors.primary,
+                    step: 5,
                     onChange: { timerManager.updateWorkDuration($0) }
                 )
             }
@@ -44,8 +45,9 @@ struct SettingsView: View {
                 
                 DurationPicker(
                     value: timerManager.restDuration,
-                    range: 1...30,
+                    range: 5...30,
                     accentColor: MaterialColors.secondary,
+                    step: 5,
                     onChange: { timerManager.updateRestDuration($0) }
                 )
             }
@@ -57,14 +59,14 @@ struct DurationPicker: View {
     let value: Int
     let range: ClosedRange<Int>
     let accentColor: Color
+    let step: Int
     let onChange: (Int) -> Void
     
     var body: some View {
         HStack(spacing: 8) {
             Button(action: {
-                if value > range.lowerBound {
-                    onChange(value - 1)
-                }
+                let newValue = max(range.lowerBound, value - step)
+                onChange(newValue)
             }) {
                 Image(systemName: "minus")
                     .font(.system(size: 12, weight: .bold))
@@ -82,9 +84,8 @@ struct DurationPicker: View {
                 .frame(width: 40)
             
             Button(action: {
-                if value < range.upperBound {
-                    onChange(value + 1)
-                }
+                let newValue = min(range.upperBound, value + step)
+                onChange(newValue)
             }) {
                 Image(systemName: "plus")
                     .font(.system(size: 12, weight: .bold))
