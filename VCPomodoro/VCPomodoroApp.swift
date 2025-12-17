@@ -120,10 +120,18 @@ class AppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
         let minutes = timerManager.minutesRemaining
         let icon = timerManager.currentSession == .work ? "🍅" : "☕️"
         
-        if timerManager.state == .idle {
-            button.title = "🍅"
-        } else {
+        switch timerManager.state {
+        case .idle:
+            // Show waiting indicator when a session just ended
+            if timerManager.currentSession == .rest {
+                button.title = "☕️⚠️"  // Work ended, waiting to start break
+            } else {
+                button.title = "🍅"     // Ready to start work
+            }
+        case .running:
             button.title = "\(icon) \(minutes)m"
+        case .paused:
+            button.title = "\(icon) \(minutes)m ⏸"
         }
     }
     
