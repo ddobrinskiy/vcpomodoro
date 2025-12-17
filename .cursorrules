@@ -7,5 +7,6 @@
 ## Project Info
 - This is a macOS menu bar Pomodoro timer app built with Swift/SwiftUI
 - Uses osascript for notifications (works without paid Apple Developer account)
-- Global hotkey: Cmd+Shift+P to start/pause timer
+- Global hotkey: Cmd+Option+Shift+P to start/pause timer
+- Global hotkey: Cmd+Option+Shift+B to skip current timer
 

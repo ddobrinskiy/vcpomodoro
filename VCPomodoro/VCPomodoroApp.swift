@@ -77,11 +77,19 @@ class AppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
             let flags = event.modifierFlags.intersection(.deviceIndependentFlagsMask)
             print("🔑 Key pressed: keyCode=\(event.keyCode), flags=\(flags)")
             
-            // Check for Cmd+Shift+P (keyCode 35 = 'P')
-            if flags.contains(.command) && flags.contains(.shift) && event.keyCode == 35 {
-                print("✅ Hotkey matched! Toggling timer...")
+            // Check for Cmd+Option+Shift+P (keyCode 35 = 'P') - start/pause
+            if flags.contains(.command) && flags.contains(.option) && flags.contains(.shift) && event.keyCode == 35 {
+                print("✅ Hotkey P matched! Toggling timer...")
                 DispatchQueue.main.async {
                     self?.toggleStartPause()
+                }
+            }
+            
+            // Check for Cmd+Option+Shift+B (keyCode 11 = 'B') - skip
+            if flags.contains(.command) && flags.contains(.option) && flags.contains(.shift) && event.keyCode == 11 {
+                print("✅ Hotkey B matched! Skipping timer...")
+                DispatchQueue.main.async {
+                    self?.timerManager.skipToNext()
                 }
             }
         }
@@ -89,9 +97,15 @@ class AppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
         // Also monitor local events (when app has focus)
         NSEvent.addLocalMonitorForEvents(matching: .keyDown) { [weak self] event in
             let flags = event.modifierFlags.intersection(.deviceIndependentFlagsMask)
-            if flags == [.command, .shift] && event.keyCode == 35 {
+            if flags == [.command, .option, .shift] && event.keyCode == 35 {
                 DispatchQueue.main.async {
                     self?.toggleStartPause()
+                }
+                return nil // Consume the event
+            }
+            if flags == [.command, .option, .shift] && event.keyCode == 11 {
+                DispatchQueue.main.async {
+                    self?.timerManager.skipToNext()
                 }
                 return nil // Consume the event
             }
