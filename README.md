@@ -4,6 +4,27 @@ A lightweight macOS menu bar Pomodoro timer app built with Swift and SwiftUI.
 
 ![App Icon](icon.png)
 
+<p align="center">
+  <img src="screenshot.png" alt="VCPomodoro Screenshot" width="280">
+</p>
+
+[![Download](https://img.shields.io/github/v/release/ddobrinskiy/vcpomodoro?label=Download&style=for-the-badge)](https://github.com/ddobrinskiy/vcpomodoro/releases/latest)
+
+## Installation
+
+### Download (Recommended)
+
+1. **[Download the latest release](https://github.com/ddobrinskiy/vcpomodoro/releases/latest)** (`VCPomodoro-vX.X.X.zip`)
+2. Unzip the downloaded file
+3. Drag `VCPomodoro.app` to your **Applications** folder
+4. Launch VCPomodoro from Applications
+5. **Grant Accessibility permissions** when prompted, or manually:
+   - Go to **System Settings → Privacy & Security → Accessibility**
+   - Click **+** and add VCPomodoro
+   - Toggle it **ON**
+
+> **Note:** On first launch, macOS may show a security warning. Right-click the app → Open → Open to bypass it.
+
 ## Features
 
 - **Menu bar integration** - Lives in your menu bar, no dock icon
@@ -42,7 +63,7 @@ A lightweight macOS menu bar Pomodoro timer app built with Swift and SwiftUI.
 - Use **Skip** button to move to the next session
 - Adjust work/break durations with the **+/-** buttons (5-minute increments)
 
-## Build Instructions
+## Build from Source
 
 ### Requirements
 
@@ -53,8 +74,8 @@ A lightweight macOS menu bar Pomodoro timer app built with Swift and SwiftUI.
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/yourusername/vc-pomodoro.git
-   cd vc-pomodoro
+   git clone https://github.com/ddobrinskiy/vcpomodoro.git
+   cd vcpomodoro
    ```
 
 2. Open the project in Xcode:
@@ -71,9 +92,7 @@ A lightweight macOS menu bar Pomodoro timer app built with Swift and SwiftUI.
 4. Build the app:
    - Press `⌘B` to build
 
-## Installation
-
-### Option 1: Copy to Applications (Recommended)
+### Copy to Applications
 
 After building, copy the app to your Applications folder:
 
@@ -81,21 +100,14 @@ After building, copy the app to your Applications folder:
 cp -r ~/Library/Developer/Xcode/DerivedData/VCPomodoro-*/Build/Products/Release/VCPomodoro.app /Applications/
 ```
 
-### Option 2: Run from Xcode
+Or simply press `⌘R` to build and run directly from Xcode.
 
-Simply press `⌘R` to build and run directly from Xcode.
+### Launch at Login (Optional)
 
-### Post-Installation Setup
-
-1. **Grant Accessibility Permissions** (required for global hotkeys):
-   - Open **System Settings → Privacy & Security → Accessibility**
-   - Click **+** and add VCPomodoro from Applications
-   - Toggle it **ON**
-
-2. **Launch at Login** (optional):
-   - Open **System Settings → General → Login Items**
-   - Click **+** under "Open at Login"
-   - Select VCPomodoro from Applications
+To start VCPomodoro automatically when you log in:
+- Open **System Settings → General → Login Items**
+- Click **+** under "Open at Login"
+- Select VCPomodoro from Applications
 
 ## Technical Notes
 
