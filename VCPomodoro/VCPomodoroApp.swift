@@ -73,9 +73,13 @@ class AppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
         
         // Set up global hotkey: Cmd+Shift+P to toggle start/pause
         hotkeyMonitor = NSEvent.addGlobalMonitorForEvents(matching: .keyDown) { [weak self] event in
-            // Check for Cmd+Shift+P
+            // Debug: print all key events
             let flags = event.modifierFlags.intersection(.deviceIndependentFlagsMask)
-            if flags == [.command, .shift] && event.keyCode == 35 { // 35 = 'P' key
+            print("🔑 Key pressed: keyCode=\(event.keyCode), flags=\(flags)")
+            
+            // Check for Cmd+Shift+P (keyCode 35 = 'P')
+            if flags.contains(.command) && flags.contains(.shift) && event.keyCode == 35 {
+                print("✅ Hotkey matched! Toggling timer...")
                 DispatchQueue.main.async {
                     self?.toggleStartPause()
                 }
